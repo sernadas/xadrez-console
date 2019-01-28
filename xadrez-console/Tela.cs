@@ -1,5 +1,6 @@
 ﻿using System;
 using tabuleiro;
+using xadrez;
 
 namespace xadrez_console
 {
@@ -71,5 +72,19 @@ namespace xadrez_console
 
 
         }
+
+
+        public static PosicaoXadrez LerPosicaoXadrez ()
+        {
+            string input = Console.ReadLine();
+            char coluna = input[0];
+            int linha = int.Parse(input[1] + "");
+
+            return new PosicaoXadrez(coluna, linha);
+        }
+
+
+
     }
 }
+
