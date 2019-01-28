@@ -7,27 +7,33 @@ namespace xadrez_console
     class Tela
     {
 
-        public static void imprimirTabuleiro(Tabuleiro tab)
+        public static void ImprimirTabuleiro(Tabuleiro tab, bool[,] movimentosPossiveis)
         {
+            ConsoleColor corBackgroundNormal = Console.BackgroundColor;
+            ConsoleColor corBackgroundDestaque = ConsoleColor.DarkGray;
+
             for (int i = 0; i < tab.Linhas; i++)
             {
                 System.Console.Write((int)(8 - i) + " ");
 
                 for (int j = 0; j < tab.Colunas; j++)
                 {
-                    if (tab.Peca(i, j) != null)
+                    if (movimentosPossiveis != null && movimentosPossiveis[i,j])
                     {
-                        ImprimePeca(tab.Peca(i, j));
+                        Console.BackgroundColor = corBackgroundDestaque;
                     }
                     else
                     {
-                        System.Console.Write("-");
+                        Console.BackgroundColor = corBackgroundNormal;
                     }
-                    
+                    ImprimePeca(tab.Peca(i, j));
                     System.Console.Write(" ");
                 }
                 System.Console.WriteLine();
+                Console.BackgroundColor = corBackgroundNormal;
+
             }
+
 
             System.Console.Write("  ");
             for (int j = 0; j < tab.Colunas; j++)
@@ -40,9 +46,20 @@ namespace xadrez_console
 
         }
 
-
-        public static void ImprimePeca(Peca peca)
+        public static void ImprimirTabuleiro(Tabuleiro tab) 
         {
+            ImprimirTabuleiro(tab, null);
+        }
+
+            public static void ImprimePeca(Peca peca)
+        {
+
+            if (peca == null)
+            {
+                Console.Write("-");
+                return;
+            }
+
 
             ConsoleColor oldColor = Console.ForegroundColor;
 
