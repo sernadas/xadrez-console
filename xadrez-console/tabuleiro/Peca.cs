@@ -21,6 +21,29 @@
             QteMovimentos++;
         }
 
+        public bool ExistemMovimentosPossiveis()
+        {
+            bool[,] movimentosPossiveis = MovimentosPossiveis();
+
+            for (int i = 0; i < Tabuleiro.Linhas; i++)
+            {
+                for (int j = 0; j < Tabuleiro.Colunas; j++)
+                {
+                    if (movimentosPossiveis[i,j])
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool PodeMoverPara(Posicao destino)
+        {
+            return MovimentosPossiveis() [destino.Linha, destino.Coluna];
+        }
+
         public abstract bool[,] MovimentosPossiveis();
     }
 }

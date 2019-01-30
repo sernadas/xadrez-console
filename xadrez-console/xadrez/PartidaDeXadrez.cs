@@ -6,15 +6,15 @@ namespace xadrez
     class PartidaDeXadrez
     {
         public Tabuleiro Tabuleiro { get; private set; }
-        private int turno;
-        private Cor jogadorAtual;
+        public int Turno { get; private set; }
+        public Cor JogadorAtual { get; private set; }
         public bool Terminada { get; private set; }
 
         public PartidaDeXadrez()
         {
             Tabuleiro = new Tabuleiro(8, 8);
-            turno = 1;
-            jogadorAtual = Cor.Branco;
+            Turno = 1;
+            JogadorAtual = Cor.Branco;
             Terminada = false;
             ColocarPecas();
         }
@@ -26,6 +26,61 @@ namespace xadrez
             Peca pecaCapturada = Tabuleiro.RetirarPeca(destino);
             Tabuleiro.ColocarPeca(peca, destino);
         }
+
+        private void MudaJogador()
+        {
+            if (JogadorAtual == Cor.Branco)
+            {
+                JogadorAtual = Cor.Preto;
+            }
+            else
+            {
+                JogadorAtual = Cor.Branco;
+            }
+        }
+
+        public void RealizaJogada (Posicao origem, Posicao destino)
+        {
+            ExecutaMovimento(origem, destino);
+            Turno++;
+            MudaJogador();
+        }
+
+        public void ValidarPosicaoDeOrigem (Posicao origem)
+        {
+            
+            if (! Tabuleiro.ExistePeca(origem))
+            {
+                throw new TabuleiroException("Não há peça nessa posição");
+            }
+
+            Peca peca = Tabuleiro.Peca(origem);
+
+            if (peca.Cor != JogadorAtual)
+            {
+                throw new TabuleiroException("Só pode escolher uma peça do Jogador de cor " + JogadorAtual.ToString());
+            }
+
+            if (! peca.ExistemMovimentosPossiveis())
+            {
+                throw new TabuleiroException("Essa peça não tem qualquer movimento possivel.");
+            }
+
+        }
+
+
+        public void ValidarPosicaoDeDestino(Posicao origem, Posicao destino)
+        {
+            
+            if (! Tabuleiro.Peca(origem).PodeMoverPara(destino))
+            {
+                throw new TabuleiroException("Não pode mover para essa posição");
+            }
+
+        }
+
+
+
 
         private void ColocarPecas ()
         {
