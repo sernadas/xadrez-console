@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using tabuleiro;
 using xadrez;
 
@@ -7,14 +8,63 @@ namespace xadrez_console
     class Tela
     {
 
-        public static void ImprimirTabuleiro(Tabuleiro tab, bool[,] movimentosPossiveis)
+        public static void ImprimirPartida(PartidaDeXadrez partida)
+        {
+            ImprimirTabuleiro(partida.Tabuleiro);
+            Console.WriteLine();
+            ImprimirPecasCapturadas(partida);
+            Console.WriteLine();
+            Console.WriteLine("Turno: " + partida.Turno);
+            Console.WriteLine("Aguardando Jodada: " + partida.JogadorAtual);
+
+        }
+
+
+        public static void ImprimirPecasCapturadas(PartidaDeXadrez partida)
+        {
+            ConsoleColor oldColor = Console.ForegroundColor;
+
+            
+            Console.WriteLine("Peças Capturadas: ");
+
+            Console.WriteLine("Brancas: ");
+            Console.ForegroundColor = GetConsoleColor(Cor.Branco);
+            ImprimirConjunto(partida.PecasCapturadas(Cor.Branco));
+
+            Console.WriteLine();
+
+            Console.WriteLine("Pretas: ");
+            Console.ForegroundColor = GetConsoleColor(Cor.Preto);
+            ImprimirConjunto(partida.PecasCapturadas(Cor.Preto));
+
+
+            Console.ForegroundColor = oldColor;
+        }
+
+
+        public static void ImprimirConjunto(HashSet<Peca> conjunto)
+        {
+            Console.Write("[");
+
+            foreach (Peca p in conjunto)
+            {
+                Console.Write(p + " ");
+            }
+
+            Console.Write("]");
+        }
+
+
+
+
+            public static void ImprimirTabuleiro(Tabuleiro tab, bool[,] movimentosPossiveis)
         {
             ConsoleColor corBackgroundNormal = Console.BackgroundColor;
             ConsoleColor corBackgroundDestaque = ConsoleColor.DarkGray;
 
             for (int i = 0; i < tab.Linhas; i++)
             {
-                System.Console.Write((int)(8 - i) + " ");
+                System.Console.Write(8 - i + " ");
 
                 for (int j = 0; j < tab.Colunas; j++)
                 {
@@ -46,6 +96,37 @@ namespace xadrez_console
 
         }
 
+
+        private static ConsoleColor GetConsoleColor (Cor cor)
+        {
+
+            ConsoleColor consoleColor = ConsoleColor.White;
+
+            switch (cor)
+            {
+                case Cor.Branco:
+                    consoleColor = ConsoleColor.White;
+                    break;
+                case Cor.Preto:
+                    consoleColor = ConsoleColor.Yellow;
+                    break;
+                case Cor.Amarelo:
+                    break;
+                case Cor.Laranja:
+                    break;
+                case Cor.Azul:
+                    break;
+                case Cor.Vermelha:
+                    break;
+                case Cor.Verde:
+                    break;
+                default:
+                    break;
+            }
+
+            return consoleColor;
+        }
+
         public static void ImprimirTabuleiro(Tabuleiro tab) 
         {
             ImprimirTabuleiro(tab, null);
@@ -63,27 +144,8 @@ namespace xadrez_console
 
             ConsoleColor oldColor = Console.ForegroundColor;
 
-            switch (peca.Cor)
-            {
-                case Cor.Branco:
-                    break;
-                case Cor.Preto:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    break;
-                case Cor.Amarelo:
-                    break;
-                case Cor.Laranja:
-                    break;
-                case Cor.Azul:
-                    break;
-                case Cor.Vermelha:
-                    break;
-                case Cor.Verde:
-                    break;
-                default:
-                    break;
-            }
-
+            Console.ForegroundColor = GetConsoleColor(peca.Cor);
+            
             Console.Write(peca);
             Console.ForegroundColor = oldColor;
 
